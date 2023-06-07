@@ -21,7 +21,7 @@
 git clone https://github.com/machfudin37/App-Topsis.git
 ```
 
-2. **Buka ```localhost/phpmyadmin``` lalu buat database dengan nama ```elibrary``` dan import file ```app-topsis.sql```**
+2. **Buka ```localhost/phpmyadmin``` lalu buat database dengan nama ```app-topsis``` dan import file ```app-topsis.sql```**
 
 3. **Buka ```localhost/app-topsis``` untuk menjalankan aplikasi**
 
