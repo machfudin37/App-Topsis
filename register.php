@@ -30,11 +30,11 @@ if (isset($_POST['submit'])) {
                 //insert data ke database
                 $query = "INSERT INTO users (username,name,email, password ) VALUES ('$username','$nama','$email','$pass')";
                 $result   = mysqli_query($conn, $query);
-                //jika insert data berhasil maka akan diredirect ke halaman kriteria.php serta menyimpan data username ke session
+                //jika insert data berhasil maka akan diredirect ke halaman index.php serta menyimpan data username ke session
                 if ($result) {
                     $_SESSION['username'] = $username;
 
-                    header('Location: kriteria.php');
+                    header('Location: index.php');
 
                     //jika gagal maka akan menampilkan pesan error
                 } else {
@@ -66,9 +66,9 @@ function cek_nama($username, $conn)
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="bootstrap/css/4.1.3/bootstrap.min.css">
     <!-- costum css -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="bootstrap/css/style.css">
 </head>
 
 <body>
@@ -117,9 +117,9 @@ function cek_nama($username, $conn)
         </section>
     </section>
     <!-- Bootstrap requirement jQuery pada posisi pertama, kemudian Popper.js, dan  yang terakhit Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="bootstrap/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="bootstrap/js/popper.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 </body>
 
 </html>
