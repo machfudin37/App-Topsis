@@ -8,32 +8,18 @@ if (!isset($_SESSION['username'])) {
 }
 include("koneksi.php");
 
-
-$query = "SELECT max(id_kriteria) as idMaks FROM kriteria";
-$hasil = mysqli_query($conn, $query);
-$data  = mysqli_fetch_array($hasil);
-$nim = $data['idMaks'];
-
-//mengatur 6 karakter sebagai jumlah karakter yang tetap
-//mengatur 3 karakter untuk jumlah karakter yang berubah-ubah
-$noUrut = (int) substr($nim, 2, 3);
-$noUrut++;
-
-//menjadikan 201353 sebagai 6 karakter yang tetap
-$char = "kr";
-//%03s untuk mengatur 3 karakter di belakang 201353
-$IDbaru = $char . sprintf("%03s", $noUrut);
-
 //ambil data
 $id = mysqli_real_escape_string($conn, $_GET['id']);
 $s = mysqli_query($conn, "SELECT * FROM kriteria WHERE id_kriteria='$id'");
 $d = mysqli_fetch_assoc($s);
 //untuk tombol ubah
 if (isset($_POST['ubah'])) {
-    $s = mysqli_query($conn, "update kriteria set nama_kriteria='$_POST[nama_kriteria]', bobot='$_POST[bobot]', poin1='$_POST[poin1]',poin2='$_POST[poin2]', poin3='$_POST[poin3]', poin4='$_POST[poin4]', poin5='$_POST[poin5]', sifat='$_POST[sifat]' where id_kriteria='$_POST[id_kriteria]'");
+    $s = mysqli_query($conn, "update kriteria set nama_kriteria='$_POST[nama_kriteria]', bobot='$_POST[bobot]', jenis='$_POST[jenis]' where id_kriteria='$_POST[id_kriteria]'");
 
-    if ($s) {
-        echo "<script>window.open('index.php','_self');</script>";
+    if ($s && mysqli_affected_rows($conn) > 0) {
+        echo '<script>alert("Kriteria berhasil diubah"); window.open("kriteria.php", "_self");</script>';
+    } else {
+        echo '<script>alert("Kriteria gagal diubah"); window.history.back();</script>';
     }
 }
 ?>
@@ -41,74 +27,91 @@ if (isset($_POST['ubah'])) {
 <html lang="en">
 
 <head>
-    <!-- meta tags -->
+    <base href="./">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="bootstrap/css/4.1.3/bootstrap.min.css">
-    <link href="bootstrap/css/3.3.7/bootstrap.min.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Ubah Kriteria | App-Topsis</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendors styles-->
+    <link rel="stylesheet" href="assets/vendors/simplebar/css/simplebar.css">
+    <link rel="stylesheet" href="assets/css/vendors/simplebar.css">
+    <?php include 'layout/head.php'; ?>
 </head>
 
 <body>
-    <nav class='navbar navbar-expand-lg navbar-dark bg-dark text-light '>
-        <div class="container">
-            <a href="index.php" class="navbar-brand">App-TOPSIS</a>
-            <button class="navbar-toggler" type="button" data-togle="collapse">
-                <span class="navbar-toggler-icon"></span>
-            </button> &nbsp; &nbsp;
-            <a href="index.php" class="navbar-brand">Kriteria</a>
-            <a href="alternatif.php" class="navbar-brand">Alternatif</a>
-            <a href="inputnilaimatriks.php" class="navbar-brand">Input Matriks</a>
-            <a href="hasiltopsis.php" class="navbar-brand">Hasil Topsis</a>
-            <ul class="navbar-nav ml-auto pt-2 pb-2">
-                <li class="nav-item ml-4">
-                    <a href="logout.php" class="nav-link text-light"> Log Out </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <div class="jumbotron jumbotron-fluid bg-light" style="height:90vh">
-        <div class="container">
-            <div class="box-header">
-                <h3 class="box-title">Ubah Data Kriteria</h3>
-                <br>
+    <?php include 'layout/sidebar.php'; ?>
+    <div class="wrapper d-flex flex-column min-vh-100">
+        <?php include 'layout/header.php'; ?>
+        <div class="container-lg px-4">
+            <div class="card mb-4">
+                <div class="card-header"><strong>Ubah Data Kriteria</strong></div>
+                <div class="container-lg px-4">
+                    <br>
+                    <form action="" method="POST">
+                        <div class="input-group mb-3">
+                            <input class="form-control" name="id_kriteria" id="id_kriteria" type="text"
+                                value="<?php echo $d['id_kriteria']; ?>" readonly>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input class="form-control" name="nama_kriteria" id="nama_kriteria" type="text"
+                                value="<?php echo $d['nama_kriteria']; ?>">
+                        </div>
+                        <div class="input-group mb-3">
+                            <input class="form-control" name="bobot" id="bobot" type="text"
+                                value="<?php echo $d['bobot']; ?>">
+                        </div>
+                        <div class="input-group mb-3">
+                            <select name="jenis" class="form-select">
+                                <option value="<?php echo $d['jenis']; ?>"><?php echo $d['jenis']; ?></option>
+                                <option value="benefit">Benefit</option>
+                                <option value="cost">Cost</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <input class="btn btn-block btn-success" type="submit" name="ubah" value="Ubah">
+                            <a href="kriteria.php" class="btn btn-block btn-primary">Kembali</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <form action="" method="POST">
-
-                <input type="text" name="id_kriteria" class="form-control" value="<?php echo $d['id_kriteria']; ?>" readonly>
-                <br />
-                <input type="text" name="nama_kriteria" class="form-control" placeholder="Nama Kriteria" value="<?php echo $d['nama_kriteria']; ?>">
-                <br />
-                <input type="text" name="bobot" class="form-control" placeholder="Bobot" value="<?php echo $d['bobot']; ?>">
-                <br />
-                <input type="text" name="poin1" class="form-control" placeholder="Poin 1" value="<?php echo $d['poin1']; ?>">
-                <br />
-                <input type="text" name="poin2" class="form-control" placeholder="Poin 2" value="<?php echo $d['poin2']; ?>">
-                <br />
-                <input type="text" name="poin3" class="form-control" placeholder="Poin 3" value="<?php echo $d['poin3']; ?>">
-                <br />
-                <input type="text" name="poin4" class="form-control" placeholder="Poin 4" value="<?php echo $d['poin4']; ?>">
-                <br />
-                <input type="text" name="poin5" class="form-control" placeholder="Poin 5" value="<?php echo $d['poin5']; ?>">
-                <br />
-                <select name="sifat" class="form-control">
-                    <option value="<?php echo $d['sifat']; ?>"><?php echo $d['sifat']; ?></option>
-                    <option value="benefit">Benefit</option>
-                    <option value="cost">Cost</option>
-                </select>
-                <br />
-                <input type="submit" name="ubah" value="Ubah" class="btn btn-primary"> &nbsp;
-                <a href="index.php" class="btn btn-primary">Kembali</a>
-                <br />
-            </form>
         </div>
+        <?php include 'layout/footer.php'; ?>
     </div>
-</body>
-<!-- Bootstrap requirement jQuery pada posisi pertama, kemudian Popper.js, dan  yang terakhit Bootstrap JS -->
-<script src="bootstrap/js/jquery-3.3.1.slim.min.js"></script>
-<script src="bootstrap/js/popper.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- CoreUI and necessary plugins-->
+    <script src="assets/vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+    <script src="assets/vendors/simplebar/js/simplebar.min.js"></script>
+    <script>
+    const header = document.querySelector('header.header');
+
+    document.addEventListener('scroll', () => {
+        if (header) {
+            header.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0);
+        }
+    });
+    </script>
+    <!-- Plugins and scripts required by this view-->
+    <script src="assets/vendors/chart.js/js/chart.umd.js"></script>
+    <script src="assets/vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
+    <script src="assets/vendors/@coreui/utils/js/index.js"></script>
+    <script src="assets/js/main.js"></script>
+
 </body>
 
 </html>

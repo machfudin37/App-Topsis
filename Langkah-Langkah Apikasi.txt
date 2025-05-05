@@ -1,0 +1,10 @@
+#pastikan menggunakan php versi 7.3
+#jika tidak memiliki php tersebut dapat mengambil dari folder php dalam source code
+1. Masukan source code pada folder localhost contohnya htdocs(xampp) dan www(laragon)
+2. Masukan database dengan membuat database baru dengan nama "app-topsis" kemudiam import file database yang terdapat di folder database pada source code ke dalam penyimpanan database
+3. emudian buka browser dan ketik pada url browser localhost/app-topsis
+4. Setelah tampil halaman login pada aplikasi masukan username: admin dan password: 123 atau dapat menggunakan fitur registrasi akun
+5. Sesudah masuk dalam aplikasi masukan master data terlebih dahulu seperti data kriteria, data alternatif, nilai matriks, data yang dimasukan dapat berupa input dalam aplikasi atau dengan menggunakan file excel dengan ekstensi .xls dan .xlsx
+6. sesudah itu kamu dapat melihat data yang sudah kamu masukan di menu nilai matriks.
+7. kamu dapat melihat hasil nilai perhitungan menggunakan metode topsis dengan masuk halaman nilai matriks ternormalisasi, nilai bobot ternormalisasi, nilai ideal, jarak solusi ideal dan nilai preferensi.
+8. didalam halaman nilai preferensi sudah dilakukan pemilihan alternatif terbaik dengan acuan nilai preferensi tertinggi

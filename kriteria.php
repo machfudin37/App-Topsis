@@ -11,95 +11,105 @@ if (!isset($_SESSION['username'])) {
 <html lang="en">
 
 <head>
-    <!-- meta tags -->
+    <base href="./">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Kriteria | App-Topsis</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendors styles-->
+    <link rel="stylesheet" href="assets/vendors/simplebar/css/simplebar.css">
+    <link rel="stylesheet" href="assets/css/vendors/simplebar.css">
+    <?php include 'layout/head.php'; ?>
 </head>
 
 <body>
-    <nav class='navbar navbar-expand-lg navbar-dark bg-dark text-light '>
-        <div class="container">
-            <a href="kriteria.php" class="navbar-brand">App-TOPSIS</a>
-            <button class="navbar-toggler" type="button" data-togle="collapse">
-                <span class="navbar-toggler-icon"></span>
-            </button> &nbsp; &nbsp;
-            <a href="kriteria.php" class="navbar-brand">Kriteria</a>
-            <a href="alternatif.php" class="navbar-brand">Alternatif</a>
-            <a href="inputnilaimatriks.php" class="navbar-brand">Nilai Matriks</a>
-            <a href="hasiltopsis.php" class="navbar-brand">Hasil Topsis</a>
-            <ul class="navbar-nav ml-auto pt-2 pb-2">
-                <li class="nav-item ml-4">
-                    <a href="logout.php" class="nav-link text-light"> Log Out </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <div class="jumbotron jumbotron-fluid bg-light" style="height:90vh">
-        <div class="container">
-            <div class="box-header">
-                <h3 class="box-title">Data Kriteria</h3>
-                <br>
-                <a href="tambahkriteria.php" class="btn btn-large btn-default">
-
-                    <i class="glyphicon glyphicon-plus"></i>
-
-                    &nbsp; Tambah Data</a>
+    <?php include 'layout/sidebar.php'; ?>
+    <div class="wrapper d-flex flex-column min-vh-100">
+        <?php include 'layout/header.php'; ?>
+        <div class="container-lg px-4">
+            <div class="card mb-4">
+                <div class="card-header"><strong>Data Kriteria</strong></div>
+                <div class="card-body">
+                    <a href="tambahkriteria.php" class="btn btn-primary">Tambah Data</a>
+                    <a href="import_excel_kriteria.php" class="btn btn-secondary">Import Excel</a>
+                    <div class="example">
+                        <div class="tab-content rounded-bottom">
+                            <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1005">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Kode</th>
+                                            <th scope="col">Nama Kriteria</th>
+                                            <th scope="col">Bobot</th>
+                                            <th scope="col">Jenis Kriteria</th>
+                                            <th scope="col">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        include("koneksi.php");
+                                        $s = mysqli_query($conn, "SELECT * FROM kriteria ORDER BY CAST(SUBSTRING(id_kriteria FROM 2) AS UNSIGNED) ASC");
+                                        while ($d = mysqli_fetch_assoc($s)) {
+                                        ?>
+                                        <tr>
+                                            <td scope="row"><?php echo $d['id_kriteria']; ?></td>
+                                            <td><?php echo $d['nama_kriteria']; ?></td>
+                                            <td><?php echo $d['bobot']; ?></td>
+                                            <td><?php echo $d['jenis']; ?></td>
+                                            <td>
+                                                <a href="ubahkriteria.php?id=<?php echo $d['id_kriteria']; ?>"
+                                                    class="btn btn-warning">Ubah</a> &nbsp;
+                                                <a href="hapuskriteria.php?id=<?php echo $d['id_kriteria']; ?>"
+                                                    class="btn btn-danger">Hapus</a>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Id Kriteria</th>
-                            <th>Nama Kriteria</th>
-                            <th>Bobot</th>
-                            <th>Poin 1</th>
-                            <th>Poin 2</th>
-                            <th>Poin 3</th>
-                            <th>Poin 4</th>
-                            <th>Poin 5</th>
-                            <th>Sifat Kriteria</th>
-                            <th>Pilihan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        include("koneksi.php");
-
-                        $s = mysqli_query($conn, "select * from kriteria order by id_kriteria ASC");
-                        while ($d = mysqli_fetch_assoc($s)) {
-                        ?>
-                            <tr>
-                                <td><?php echo $d['id_kriteria']; ?></td>
-                                <td><?php echo $d['nama_kriteria']; ?></td>
-                                <td><?php echo $d['bobot']; ?></td>
-                                <td><?php echo $d['poin1']; ?></td>
-                                <td><?php echo $d['poin2']; ?></td>
-                                <td><?php echo $d['poin3']; ?></td>
-                                <td><?php echo $d['poin4']; ?></td>
-                                <td><?php echo $d['poin5']; ?></td>
-                                <td><?php echo $d['sifat']; ?></td>
-                                <td>
-                                    <a href="ubahkriteria.php?id=<?php echo $d['id_kriteria']; ?>" class="btn btn-warning">Ubah</a> &nbsp;
-                                    <a href="hapuskriteria.php?id=<?php echo $d['id_kriteria']; ?>" class="btn btn-danger">Hapus</a>
-                                </td>
-                            </tr>
-                        <?php
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
+            <?php include 'layout/footer.php'; ?>
         </div>
-    </div>
-</body>
-<!-- Bootstrap requirement jQuery pada posisi pertama, kemudian Popper.js, dan  yang terakhit Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        <!-- CoreUI and necessary plugins-->
+        <script src="assets/vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+        <script src="assets/vendors/simplebar/js/simplebar.min.js"></script>
+        <script>
+        const header = document.querySelector('header.header');
+
+        document.addEventListener('scroll', () => {
+            if (header) {
+                header.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0);
+            }
+        });
+        </script>
+        <!-- Plugins and scripts required by this view-->
+        <script src="assets/vendors/chart.js/js/chart.umd.js"></script>
+        <script src="assets/vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
+        <script src="assets/vendors/@coreui/utils/js/index.js"></script>
+        <script src="assets/js/main.js"></script>
+
 </body>
 
 </html>

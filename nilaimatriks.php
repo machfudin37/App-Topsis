@@ -14,123 +14,111 @@ $h = mysqli_num_rows($s);
 <html lang="en">
 
 <head>
-    <!-- meta tags -->
+    <base href="./">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="bootstrap/css/4.1.3/bootstrap.min.css">
-    <link href="bootstrap/css/3.3.7/bootstrap.min.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Nilai Matriks | App-Topsis</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendors styles-->
+    <link rel="stylesheet" href="assets/vendors/simplebar/css/simplebar.css">
+    <link rel="stylesheet" href="assets/css/vendors/simplebar.css">
+    <?php include 'layout/head.php'; ?>
 </head>
 
 <body>
-    <nav class='navbar navbar-expand-lg navbar-dark bg-dark text-light '>
-        <div class="container">
-            <a href="index.php" class="navbar-brand">App-TOPSIS</a>
-            <button class="navbar-toggler" type="button" data-togle="collapse">
-                <span class="navbar-toggler-icon"></span>
-            </button> &nbsp; &nbsp;
-            <a href="index.php" class="navbar-brand">Kriteria</a>
-            <a href="alternatif.php" class="navbar-brand">Alternatif</a>
-            <a href="inputnilaimatriks.php" class="navbar-brand">Input Matriks</a>
-            <a href="hasiltopsis.php" class="navbar-brand">Hasil Topsis</a>
-            <ul class="navbar-nav ml-auto pt-2 pb-2">
-                <li class="nav-item ml-4">
-                    <a href="logout.php" class="nav-link text-light"> Log Out </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <div class="jumbotron jumbotron-fluid bg-light" style="height:90vh">
-        <div class="container">
-            <div class="box-header">
-                <h3 class="box-title">Data Hasil Topsis</h3>
-                <br>
-                <a href="nilaimatriks.php" class="btn btn-large btn-default">
+    <?php include 'layout/sidebar.php'; ?>
+    <div class="wrapper d-flex flex-column min-vh-100">
+        <?php include 'layout/header.php'; ?>
+        <div class="container-lg px-4">
+            <div class="card mb-4">
+                <div class="card-header"><strong>Nilai Matriks</strong></div>
+                <div class="card-body">
+                    <div class="example">
+                        <div class="tab-content rounded-bottom">
+                            <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-1005">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2">Kode</th>
+                                            <th rowspan="2">Nama Kriteria</th>
+                                            <th colspan="<?php echo $h; ?>">
+                                                <center>
+                                                    Kriteria
+                                                </center>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <?php
+                                            for ($n = 1; $n <= $h; $n++) {
+                                                echo "<th><center>C{$n}</center></th>";
+                                            }
+                                            ?>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $i = 0;
+                                        $a = mysqli_query($conn, "SELECT * FROM alternatif ORDER BY CAST(SUBSTRING(id_alternatif FROM 2) AS UNSIGNED) ASC");
+                                        while ($da = mysqli_fetch_assoc($a)) {
+                                            echo "<tr>
+		                                    <td>" . $da['id_alternatif'] . "</td>
+		                                    <td>" . $da['nm_alternatif'] . "</td>";
+                                            $idalt = $da['id_alternatif'];
+                                            //ambil nilai
+                                            $n = mysqli_query($conn, "select * from nilai_matrik where id_alternatif='$idalt' order by id_matrik asc");
 
-                    <i class="glyphicon glyphicon"></i>
+                                            while ($dn = mysqli_fetch_assoc($n)) {
 
-                    &nbsp; Nilai Matriks</a>
-                <a href="nilaimatriksternormalisasi.php" class="btn btn-large btn-default">
+                                                echo "<td align='center'>$dn[nilai]</td>";
+                                            }
+                                            echo "</tr>\n";
+                                        }
 
-                    <i class="glyphicon glyphicon"></i>
-
-                    &nbsp; Nilai Matrik Ternormalisasi</a>
-                <a href="nilaibobotternormalisasi.php" class="btn btn-large btn-default">
-
-                    <i class="glyphicon glyphicon"></i>
-
-                    &nbsp; Nilai Bobot Ternormalisasi</a>
-                <a href="nilaiideal.php" class="btn btn-large btn-default">
-
-                    <i class="glyphicon glyphicon"></i>
-
-                    &nbsp; Nilai Ideal Positif/Negatif</a>
-                <a href="jaraksolusiideal.php" class="btn btn-large btn-default">
-
-                    <i class="glyphicon glyphicon"></i>
-
-                    &nbsp; Jarak Solusi Ideal Positif/Negatif</a>
-                <a href="nilaipreferensi.php" class="btn btn-large btn-default">
-
-                    <i class="glyphicon glyphicon"></i>
-
-                    &nbsp; Nilai Preferensi</a>
-            </div>
-            <div class="table-responsive">
-                <div class="box-header">
-                    <h3 class="box-title ">Nilai Matriks</h3>
-                </div>
-                <div class="table table-bordered table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th rowspan="2">No</th>
-                                <th rowspan="2">Nama</th>
-                                <th colspan="<?php echo $h; ?>">
-                                    <center>Kriteria</center>
-                                </th>
-                            </tr>
-                            <tr>
-                                <?php
-                                for ($n = 1; $n <= $h; $n++) {
-                                    echo "<th>C{$n}</th>";
-                                }
-                                ?>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $i = 0;
-                            $a = mysqli_query($conn, "select * from alternatif order by id_alternatif asc;");
-                            while ($da = mysqli_fetch_assoc($a)) {
-                                echo "<tr>
-		<td>" . (++$i) . "</td>
-		<td>" . $da['nm_alternatif'] . "</td>";
-                                $idalt = $da['id_alternatif'];
-                                //ambil nilai
-                                $n = mysqli_query($conn, "select * from nilai_matrik where id_alternatif='$idalt' order by id_matrik asc");
-
-                                while ($dn = mysqli_fetch_assoc($n)) {
-
-                                    echo "<td align='center'>$dn[nilai]</td>";
-                                }
-                                echo "</tr>\n";
-                            }
-
-                            ?>
-
-                        </tbody>
-                    </table>
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <?php include 'layout/footer.php'; ?>
         </div>
-    </div>
-</body>
-<!-- Bootstrap requirement jQuery pada posisi pertama, kemudian Popper.js, dan  yang terakhit Bootstrap JS -->
-<script src="bootstrap/js/jquery-3.3.1.slim.min.js"></script>
-<script src="bootstrap/js/popper.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+        <!-- CoreUI and necessary plugins-->
+        <script src="assets/vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+        <script src="assets/vendors/simplebar/js/simplebar.min.js"></script>
+        <script>
+            const header = document.querySelector('header.header');
+
+            document.addEventListener('scroll', () => {
+                if (header) {
+                    header.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0);
+                }
+            });
+        </script>
+        <!-- Plugins and scripts required by this view-->
+        <script src="assets/vendors/chart.js/js/chart.umd.js"></script>
+        <script src="assets/vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
+        <script src="assets/vendors/@coreui/utils/js/index.js"></script>
+        <script src="assets/js/main.js"></script>
+
 </body>
 
 </html>
