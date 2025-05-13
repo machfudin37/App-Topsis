@@ -1,6 +1,6 @@
 <h1 align="center">Selamat datang di App - Topsis! 👋</h1>
 
-![User Interface](https://github.com/machfudin37/App-Topsis/blob/main/app/user-interface.png?raw=true)
+![User Interface](https://github.com/machfudin37/App-Topsis/blob/main/user-interface.png?raw=true)
 
 
 ------------
